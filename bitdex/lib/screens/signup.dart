@@ -1,56 +1,74 @@
 import 'package:bitdex/constants/appcolors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 
 bool _obscureText = true;
 
-class login extends StatefulWidget {
-  const login({Key? key}) : super(key: key);
+// final passwordController = TextEditingController();
 
-  @override
-  State<login> createState() => _loginState();
+class MultiController {
+  final _textController3 = TextEditingController();
+  final passwordController = TextEditingController();
 }
 
-class _loginState extends State<login> {
-  bool _hasInput4 = false;
-  bool _hasInput5 = false;
+class signup extends StatefulWidget {
+  const signup({Key? key}) : super(key: key);
 
-  final _textController4 = TextEditingController();
-  final _textController5 = TextEditingController();
+  @override
+  State<signup> createState() => _signupState();
+}
+
+class _signupState extends State<signup> {
+  bool _hasInput1 = false;
+  bool _hasInput2 = false;
+  bool _hasInput3 = false;
+
+  final _textController1 = TextEditingController();
+  final _textController2 = TextEditingController();
+  final _textController3 = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _textController4.addListener(_onTextChanged4);
-    _textController5.addListener(_onTextChanged5);
+    _textController1.addListener(_onTextChanged1);
+    _textController2.addListener(_onTextChanged2);
+    _textController3.addListener(_onTextChanged3);
   }
 
   @override
   void dispose() {
-    _textController4.dispose();
-    _textController5.dispose();
+    _textController1.dispose();
+    _textController2.dispose();
+    _textController3.dispose();
     super.dispose();
   }
 
-  void _onTextChanged4() {
+  void _onTextChanged1() {
     setState(() {
-      _hasInput4 = _textController4.text.trim().isNotEmpty;
+      _hasInput1 = _textController1.text.trim().isNotEmpty;
     });
   }
 
-  void _onTextChanged5() {
+  void _onTextChanged2() {
     setState(() {
-      _hasInput5 = _textController5.text.trim().isNotEmpty;
+      _hasInput2 = _textController2.text.trim().isNotEmpty;
+    });
+  }
+
+  void _onTextChanged3() {
+    setState(() {
+      _hasInput3 = _textController3.text.trim().isNotEmpty;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.black,
-        body: SingleChildScrollView(
-            child: Container(
-          margin: const EdgeInsets.fromLTRB(0, 120, 0, 0),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: AppColors.black,
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
           width: double.infinity,
           child: Column(
             children: [
@@ -59,7 +77,7 @@ class _loginState extends State<login> {
                 height: 200.0,
               ),
               const Text(
-                'Sign In',
+                'Sign Up',
                 style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
@@ -69,7 +87,41 @@ class _loginState extends State<login> {
                 child: SizedBox(
                     width: 300,
                     child: TextField(
-                      controller: _textController4,
+                      controller: _textController1,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(
+                        color: AppColors.black,
+                      ),
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 16.0),
+                        isDense: true,
+                        filled: true,
+                        fillColor: AppColors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(Icons.person),
+                        prefixIconColor: AppColors.black,
+                        prefixStyle: TextStyle(color: AppColors.black),
+                        hintText: 'Name',
+                        hintStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      maxLines: 1,
+                    )),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Container(
+                child: SizedBox(
+                    width: 300,
+                    child: TextField(
+                      controller: _textController2,
                       textInputAction: TextInputAction.next,
                       style: const TextStyle(
                         color: AppColors.black,
@@ -87,10 +139,9 @@ class _loginState extends State<login> {
                         ),
                         prefixIcon: Icon(Icons.mail),
                         prefixIconColor: AppColors.black,
-                        prefixStyle: TextStyle(color: AppColors.black),
                         hintText: 'Email',
                         hintStyle: TextStyle(
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       ),
                       maxLines: 1,
@@ -103,14 +154,19 @@ class _loginState extends State<login> {
                 child: SizedBox(
                     width: 300,
                     child: TextField(
-                      controller: _textController5,
                       textInputAction: TextInputAction.done,
+                      controller: _textController3,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(5),
+                      ],
                       obscureText: _obscureText,
                       style: const TextStyle(
                         color: AppColors.black,
                       ),
                       decoration: InputDecoration(
-                        errorStyle: const TextStyle(color: AppColors.red),
+                        errorStyle: const TextStyle(
+                          color: AppColors.red,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(_obscureText
                               ? Icons.visibility
@@ -125,14 +181,14 @@ class _loginState extends State<login> {
                             horizontal: 20.0, vertical: 16.0),
                         isDense: true,
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: AppColors.white,
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(20.0),
                           ),
                         ),
-                        prefixIcon: const Icon(Icons.key),
-                        prefixIconColor: Colors.black,
+                        prefixIcon: const Icon(Icons.password),
+                        prefixIconColor: AppColors.black,
                         hintText: 'Password',
                         hintStyle: const TextStyle(
                           color: AppColors.black,
@@ -156,13 +212,13 @@ class _loginState extends State<login> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
-                  onPressed: _hasInput4 && _hasInput5
+                  onPressed: _hasInput1 && _hasInput2 && _hasInput3
                       ? () {
                           Navigator.pushNamed(context, '/authenticate');
                         }
                       : null,
                   child: const Text(
-                    'Log In',
+                    'Sign Up',
                     style: TextStyle(
                       fontSize: 20.0,
                       color: AppColors.white,
@@ -170,27 +226,30 @@ class _loginState extends State<login> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 0.0,
+              ),
               Row(
                 children: [
                   const SizedBox(
-                    width: 140.0,
+                    width: 90.0,
                   ),
                   const Text(
-                    'New User?',
+                    'Already have an account?',
                     style: TextStyle(
                       fontSize: 15.0,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
+                      Navigator.pushNamed(context, '/');
                     },
                     child: const Text(
-                      'Sign Up',
+                      'Sign In',
                       style: TextStyle(
                         fontSize: 15.0,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                   ),
@@ -198,6 +257,8 @@ class _loginState extends State<login> {
               ),
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

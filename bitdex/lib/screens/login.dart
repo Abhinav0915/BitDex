@@ -1,6 +1,5 @@
 import 'package:bitdex/constants/appcolors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 bool _obscureText = true;
 
@@ -99,48 +98,45 @@ class _loginState extends State<login> {
               const SizedBox(
                 height: 20.0,
               ),
-              Container(
-                child: SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _textController5,
-                      textInputAction: TextInputAction.done,
-                      obscureText: _obscureText,
-                      style: const TextStyle(
+              SizedBox(
+                  width: 300,
+                  child: TextField(
+                    controller: _textController5,
+                    textInputAction: TextInputAction.done,
+                    obscureText: _obscureText,
+                    style: const TextStyle(
+                      color: AppColors.black,
+                    ),
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureText
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 16.0),
+                      isDense: true,
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
+                        ),
+                      ),
+                      prefixIcon: const Icon(Icons.key),
+                      prefixIconColor: Colors.black,
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(
                         color: AppColors.black,
                       ),
-                      decoration: InputDecoration(
-                        errorStyle: const TextStyle(color: AppColors.red),
-                        suffixIcon: IconButton(
-                          icon: Icon(_obscureText
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 16.0),
-                        isDense: true,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20.0),
-                          ),
-                        ),
-                        prefixIcon: const Icon(Icons.key),
-                        prefixIconColor: Colors.black,
-                        hintText: 'Password',
-                        hintStyle: const TextStyle(
-                          color: AppColors.black,
-                        ),
-                      ),
-                      maxLines: 1,
-                    )),
-              ),
+                    ),
+                    maxLines: 1,
+                  )),
               const SizedBox(
                 height: 30.0,
               ),

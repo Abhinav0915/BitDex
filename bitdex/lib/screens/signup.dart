@@ -1,4 +1,6 @@
 import 'package:bitdex/constants/appcolors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -156,9 +158,6 @@ class _signupState extends State<signup> {
                     child: TextField(
                       textInputAction: TextInputAction.done,
                       controller: _textController3,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(5),
-                      ],
                       obscureText: _obscureText,
                       style: const TextStyle(
                         color: AppColors.black,
@@ -214,9 +213,18 @@ class _signupState extends State<signup> {
                   ),
                   onPressed: _hasInput1 && _hasInput2 && _hasInput3
                       ? () {
-                          Navigator.pushNamed(context, '/authenticate');
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                email: _textController2.text,
+                                password: _textController3.text,
+                              )
+                              .then((value) =>
+                                  Navigator.pushNamed(context, '/homepage'))
+                              .onError((error, stackTrace) =>
+                                  print('Failed to sign up user: $error'));
                         }
                       : null,
+                      
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(

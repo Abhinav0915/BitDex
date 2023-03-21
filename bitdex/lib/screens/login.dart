@@ -1,4 +1,6 @@
 import 'package:bitdex/constants/appcolors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 bool _obscureText = true;
@@ -154,7 +156,13 @@ class _loginState extends State<login> {
                   ),
                   onPressed: _hasInput4 && _hasInput5
                       ? () {
-                          Navigator.pushNamed(context, '/authenticate');
+                          FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                email: _textController4.text,
+                                password: _textController5.text,
+                              )
+                              .then((value) =>
+                                  Navigator.pushNamed(context, '/homepage'));
                         }
                       : null,
                   child: const Text(

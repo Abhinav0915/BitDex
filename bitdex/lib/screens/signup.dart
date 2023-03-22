@@ -215,16 +215,35 @@ class _signupState extends State<signup> {
                       ? () {
                           FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
-                                email: _textController2.text,
-                                password: _textController3.text,
-                              )
-                              .then((value) =>
-                                  Navigator.pushNamed(context, '/homepage'))
-                              .onError((error, stackTrace) =>
-                                  print('Failed to sign up user: $error'));
+                            email: _textController2.text,
+                            password: _textController3.text,
+                          )
+                              .then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('User registered successfully'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            Future.delayed(Duration(seconds: 2), () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/homepage',
+                                (route) =>
+                                    false, // remove all routes except homepage
+                              );
+                            });
+                          }).onError((error, stackTrace) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('Failed to register user: $error'),
+                              ),
+                            );
+                            print('Failed to sign up user: $error');
+                          });
                         }
                       : null,
-                      
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(

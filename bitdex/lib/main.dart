@@ -27,7 +27,7 @@ class BitDex extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      initialRoute: '/',
+      initialRoute: '/homepage',
       routes: routes,
     );
   }

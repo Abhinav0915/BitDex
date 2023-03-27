@@ -18,7 +18,7 @@ class _splashState extends State<splash> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 4));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
   }
 
   @override
@@ -46,10 +46,8 @@ class _splashState extends State<splash> with TickerProviderStateMixin {
                     _controller
                       ..duration = compos.duration
                       ..forward().then((value) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => login()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => login()));
                       });
                   },
                 ),

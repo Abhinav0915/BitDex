@@ -1,4 +1,3 @@
-import 'package:bitdex/constants/appcolors.dart';
 import 'package:bitdex/screens/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class BitDex extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      initialRoute: '/homepage',
+      initialRoute: '/',
       routes: routes,
     );
   }

@@ -2,6 +2,7 @@ import 'package:bitdex/screens/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bitdex/screens/login.dart';
+import 'package:bitdex/screens/splash.dart';
 import 'package:bitdex/screens/homepage.dart';
 
 void main() async {
@@ -19,6 +20,7 @@ class BitDex extends StatelessWidget {
       '/': (context) => const login(),
       '/signup': (context) => const signup(),
       '/homepage': (context) => const homepage(),
+      '/splash': (context) => const splash(),
     };
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -26,7 +28,7 @@ class BitDex extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: routes,
     );
   }

@@ -1,4 +1,5 @@
 import 'package:bitdex/constants/appcolors.dart';
+import 'package:bitdex/screens/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -161,8 +162,28 @@ class _loginState extends State<login> {
                                 email: _textController4.text,
                                 password: _textController5.text,
                               )
-                              .then((value) =>
-                                  Navigator.pushNamed(context, '/homepage'));
+                              .then((value) => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const homepage())))
+                              .catchError((error) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Login Failed"),
+                                    content: Text(error.message),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text("OK"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                          });
                         }
                       : null,
                   child: const Text(

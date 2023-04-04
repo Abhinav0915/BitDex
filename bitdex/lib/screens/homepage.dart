@@ -43,9 +43,9 @@ class _homepageState extends State<homepage> {
         appBar: Appbar.getAppBar("HOMEPAGE"),
         body: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 2.0,
-              mainAxisSpacing: 2.0,
+              crossAxisCount: 3,
+              crossAxisSpacing: 7.0,
+              mainAxisSpacing: 7.0,
             ),
             itemCount: _cryptoData.length,
             itemBuilder: (BuildContext context, int index) {
@@ -55,7 +55,7 @@ class _homepageState extends State<homepage> {
               final priceString = price.toStringAsFixed(2);
 
               return Card(
-                margin: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

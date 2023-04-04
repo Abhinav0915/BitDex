@@ -171,6 +171,7 @@ class _loginState extends State<login> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
+                                    backgroundColor: AppColors.red,
                                     title: Text("Login Failed"),
                                     content: Text(error.message),
                                     actions: <Widget>[

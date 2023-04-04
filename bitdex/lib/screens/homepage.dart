@@ -41,48 +41,51 @@ class _homepageState extends State<homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: Appbar.getAppBar("HOMEPAGE"),
-        body: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 7.0,
-              mainAxisSpacing: 7.0,
-            ),
-            itemCount: _cryptoData.length,
-            itemBuilder: (BuildContext context, int index) {
-              final data = _cryptoData[index];
-              final price =
-                  double.parse(data['quote']['USD']['price'].toString());
-              final priceString = price.toStringAsFixed(2);
+        body: GestureDetector(
+          onTap: () {},
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 7.0,
+              ),
+              itemCount: _cryptoData.length,
+              itemBuilder: (BuildContext context, int index) {
+                final data = _cryptoData[index];
+                final price =
+                    double.parse(data['quote']['USD']['price'].toString());
+                final priceString = price.toStringAsFixed(2);
 
-              return Card(
-                margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      'https://s2.coinmarketcap.com/static/img/coins/64x64/${data['id']}.png',
-                      height: 40.0,
-                      width: 40.0,
-                    ),
-                    const SizedBox(height: 10.0),
-                    Text(
-                      data['name'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                return Card(
+                  margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        'https://s2.coinmarketcap.com/static/img/coins/64x64/${data['id']}.png',
+                        height: 40.0,
+                        width: 40.0,
                       ),
-                    ),
-                    const SizedBox(height: 5.0),
-                    Text(
-                      '\$$priceString',
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 10.0),
+                      Text(
+                        data['name'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }));
+                      const SizedBox(height: 5.0),
+                      Text(
+                        '\$$priceString',
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        ));
   }
 }

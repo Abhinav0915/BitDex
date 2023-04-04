@@ -1,9 +1,11 @@
+import 'package:bitdex/screens/cryptodetails.dart';
 import 'package:bitdex/screens/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bitdex/screens/login.dart';
 import 'package:bitdex/screens/splash.dart';
 import 'package:bitdex/screens/homepage.dart';
+import '../screens/cryptodetails.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,7 @@ class BitDex extends StatelessWidget {
   Widget build(BuildContext context) {
     var routes = {
       '/': (context) => const login(),
+      // '/cryptodetails': (context) => CryptoDetailsPage(),
       '/signup': (context) => const signup(),
       '/homepage': (context) => const homepage(),
       '/splash': (context) => const splash(),

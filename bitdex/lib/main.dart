@@ -20,7 +20,9 @@ class BitDex extends StatelessWidget {
   Widget build(BuildContext context) {
     var routes = {
       '/': (context) => const login(),
-      // '/cryptodetails': (context) => CryptoDetailsPage(),
+      '/cryptodetails': (context) => CryptoDetailsPage(
+            data: null,
+          ),
       '/signup': (context) => const signup(),
       '/homepage': (context) => const homepage(),
       '/splash': (context) => const splash(),

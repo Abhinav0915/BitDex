@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:bitdex/utils/appbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../screens/login.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -40,9 +42,18 @@ class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            FirebaseAuth.instance.signOut().then((value) =>
+                MaterialPageRoute(builder: (context) => const login()));
+          },
+          child: const Icon(Icons.logout),
+        ),
         appBar: Appbar.getAppBar("HOMEPAGE"),
         body: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            // Navigator.pushNamed(context, '/cryptodetails');
+          },
           child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -57,6 +68,7 @@ class _homepageState extends State<homepage> {
                 final priceString = price.toStringAsFixed(2);
 
                 return Card(
+                  elevation: 50.0,
                   margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

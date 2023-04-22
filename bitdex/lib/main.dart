@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:bitdex/screens/login.dart';
 import 'package:bitdex/screens/splash.dart';
 import 'package:bitdex/screens/homepage.dart';
-import '../screens/cryptodetails.dart';
+import '../screens/favorite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +25,7 @@ class BitDex extends StatelessWidget {
           ),
       '/signup': (context) => const signup(),
       '/homepage': (context) => const homepage(),
+      '/favorite': (context) => const favorite(),
       '/splash': (context) => const splash(),
     };
     return MaterialApp(

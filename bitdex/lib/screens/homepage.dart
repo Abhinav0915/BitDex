@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'package:bitdex/constants/appcolors.dart';
 import 'package:bitdex/utils/appbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'favorite.dart';
+import '../models/api.dart';
 import '../screens/login.dart';
-import '../screens/favourite.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -18,114 +15,128 @@ class homepage extends StatefulWidget {
 class _homepageState extends State<homepage> {
   List _cryptoData = [];
 
-  int _currentIndex = 0;
-
-  final List<Widget> _children = [
-    homepage(),
-    favourite(),
-  ];
-  void _onTabTapped(int index) {
-    if (index == 2) {
-      // check if logout button is tapped
-      // Log out
-      FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const login())));
-    } else {
-      setState(() {
-        _currentIndex = index;
-      });
-    }
-  }
-
-  Future<List> _fetchCryptoData() async {
-    final response = await http.get(
-        Uri.parse(
-            'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'),
-        headers: {'X-CMC_PRO_API_KEY': '4b3df8c1-8866-4171-b40b-24d84795532b'});
-
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      setState(() {
-        _cryptoData = jsonResponse['data'];
-      });
-    } else {
-      throw Exception('Failed to load data');
-    }
-
-    return _cryptoData;
-  }
-
   @override
   void initState() {
     super.initState();
     _fetchCryptoData();
   }
 
+  Future<void> _fetchCryptoData() async {
+    final cryptoData = await Api.fetchCryptoData();
+    setState(() {
+      _cryptoData = cryptoData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex, // set the currentIndex property
-          onTap: _onTabTapped,
-          backgroundColor: AppColors.purple,
-          elevation: 20.0,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Favorites',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.logout),
-              label: 'Log Out',
+
+        // bottomNavigationBar: BottomNavigationBar(s
+        //   currentIndex: _currentIndex, // set the currentIndex property
+        //   // onTap: _onTabTapped,
+        //   backgroundColor: AppColors.purple,
+        //   elevation: 20.0,
+        //   items: const <BottomNavigationBarItem>[
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.home),
+        //       label: 'Home',
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.favorite),
+        //       label: 'Favorites',
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.logout),
+        //       label: 'Log Out',
+        //     ),
+        //   ],
+        // ),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search),
             ),
           ],
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          title: const Text('BitDex'),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.logout),
-        ),
-        appBar: Appbar.getAppBar("HOMEPAGE"),
-        body: GestureDetector(
-          onTap: () {
-            // Navigator.pushNamed(context, '/cryptodetails');
-          },
-          child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 7.0,
-                mainAxisSpacing: 7.0,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Drawer Header'),
               ),
-              itemCount: _cryptoData.length,
-              itemBuilder: (BuildContext context, int index) {
-                final data = _cryptoData[index];
-                final price =
-                    double.parse(data['quote']['USD']['price'].toString());
-                final priceString = price.toStringAsFixed(2);
+              ListTile(
+                leading: Icon(Icons.favorite),
+                title: const Text('Favorites'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Log Out'),
+                leading: Icon(Icons.logout),
+                onTap: () {
+                  onPressed:
+                  () {
+                    FirebaseAuth.instance.signOut().then((value) =>
+                        MaterialPageRoute(builder: (context) => const login()));
+                  };
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.red, Colors.purple, Colors.green],
+              ),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                // Navigator.pushNamed(context, '/cryptodetails');
+              },
+              child: ListView.builder(
+                itemCount: _cryptoData.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final data = _cryptoData[index];
+                  final price =
+                      double.parse(data['quote']['USD']['price'].toString());
+                  final priceString = price.toStringAsFixed(2);
 
-                return Card(
-                  elevation: 50.0,
-                  margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.network(
+                  return Card(
+                    elevation: 0.0,
+                    color: Colors.transparent,
+
+                    // margin: const EdgeInsets.symmetric(
+                    //     horizontal: 10.0, vertical: 5.0),
+                    child: ListTile(
+                      leading: Image.network(
                         'https://s2.coinmarketcap.com/static/img/coins/64x64/${data['id']}.png',
                         height: 40.0,
                         width: 40.0,
                       ),
-                      const SizedBox(height: 10.0),
-                      Text(
+                      title: Text(
                         data['name'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 5.0),
-                      Text(
+                      trailing: Text(
                         '\$$priceString',
                         style: const TextStyle(
                           color: Colors.green,
@@ -133,10 +144,10 @@ class _homepageState extends State<homepage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
-                );
-              }),
-        ));
+                    ),
+                  );
+                },
+              ),
+            )));
   }
 }

@@ -14,6 +14,9 @@ class homepage extends StatefulWidget {
 
 class _homepageState extends State<homepage> {
   List _cryptoData = [];
+  TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+  List _filteredCryptoData = [];
 
   @override
   void initState() {
@@ -25,6 +28,15 @@ class _homepageState extends State<homepage> {
     final cryptoData = await Api.fetchCryptoData();
     setState(() {
       _cryptoData = cryptoData;
+    });
+  }
+
+  void _filterCryptoData(String searchText) {
+    setState(() {
+      _filteredCryptoData = _cryptoData
+          .where((data) =>
+              data['name'].toLowerCase().contains(searchText.toLowerCase()))
+          .toList();
     });
   }
 
@@ -53,15 +65,44 @@ class _homepageState extends State<homepage> {
         //   ],
         // ),
         appBar: AppBar(
+          title: _isSearching
+              ? AnimatedContainer(
+                  duration: const Duration(milliseconds: 550),
+                  width: _isSearching
+                      ? MediaQuery.of(context).size.width * 0.6
+                      : 0.0,
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      _filterCryptoData(value);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Search Cryptocurrency',
+                      hintStyle:
+                          TextStyle(color: Color.fromARGB(143, 255, 255, 255)),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                )
+              : const Text('BitDex'),
           actions: [
             IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search),
+              onPressed: () {
+                setState(() {
+                  _isSearching = !_isSearching;
+                  if (!_isSearching) {
+                    _searchController.clear();
+                    _filteredCryptoData = _cryptoData;
+                  }
+                });
+              },
+              icon: _isSearching
+                  ? const Icon(Icons.clear)
+                  : const Icon(Icons.search),
             ),
           ],
           backgroundColor: Colors.black,
           centerTitle: true,
-          title: const Text('BitDex'),
         ),
         drawer: Drawer(
           child: ListView(
@@ -92,9 +133,6 @@ class _homepageState extends State<homepage> {
                     FirebaseAuth.instance.signOut().then((value) =>
                         MaterialPageRoute(builder: (context) => const login()));
                   };
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                 },
               ),
             ],
@@ -113,9 +151,9 @@ class _homepageState extends State<homepage> {
                 // Navigator.pushNamed(context, '/cryptodetails');
               },
               child: ListView.builder(
-                itemCount: _cryptoData.length,
+                itemCount: _filteredCryptoData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final data = _cryptoData[index];
+                  final data = _filteredCryptoData[index];
                   final price =
                       double.parse(data['quote']['USD']['price'].toString());
                   final priceString = price.toStringAsFixed(2);

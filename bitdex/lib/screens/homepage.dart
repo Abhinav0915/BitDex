@@ -22,6 +22,7 @@ class _homepageState extends State<homepage> {
   void initState() {
     super.initState();
     _fetchCryptoData();
+    // Initialize filtered data with all data
   }
 
   Future<void> _fetchCryptoData() async {
@@ -43,27 +44,6 @@ class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-        // bottomNavigationBar: BottomNavigationBar(s
-        //   currentIndex: _currentIndex, // set the currentIndex property
-        //   // onTap: _onTabTapped,
-        //   backgroundColor: AppColors.purple,
-        //   elevation: 20.0,
-        //   items: const <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.home),
-        //       label: 'Home',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.favorite),
-        //       label: 'Favorites',
-        //     ),
-        //     BottomNavigationBarItem(
-        //       icon: Icon(Icons.logout),
-        //       label: 'Log Out',
-        //     ),
-        //   ],
-        // ),
         appBar: AppBar(
           title: _isSearching
               ? AnimatedContainer(
@@ -118,9 +98,6 @@ class _homepageState extends State<homepage> {
                 leading: Icon(Icons.favorite),
                 title: const Text('Favorites'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
                 },
               ),
@@ -128,11 +105,8 @@ class _homepageState extends State<homepage> {
                 title: const Text('Log Out'),
                 leading: Icon(Icons.logout),
                 onTap: () {
-                  onPressed:
-                  () {
-                    FirebaseAuth.instance.signOut().then((value) =>
-                        MaterialPageRoute(builder: (context) => const login()));
-                  };
+                  FirebaseAuth.instance.signOut().then((value) =>
+                      MaterialPageRoute(builder: (context) => const login()));
                 },
               ),
             ],
@@ -143,7 +117,11 @@ class _homepageState extends State<homepage> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.red, Colors.purple, Colors.green],
+                colors: [
+                  Colors.orange,
+                  Color.fromARGB(255, 88, 1, 201),
+                  Colors.red,
+                ],
               ),
             ),
             child: GestureDetector(
@@ -151,9 +129,9 @@ class _homepageState extends State<homepage> {
                 // Navigator.pushNamed(context, '/cryptodetails');
               },
               child: ListView.builder(
-                itemCount: _filteredCryptoData.length,
+                itemCount: _cryptoData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final data = _filteredCryptoData[index];
+                  final data = _cryptoData[index];
                   final price =
                       double.parse(data['quote']['USD']['price'].toString());
                   final priceString = price.toStringAsFixed(2);
@@ -161,9 +139,6 @@ class _homepageState extends State<homepage> {
                   return Card(
                     elevation: 0.0,
                     color: Colors.transparent,
-
-                    // margin: const EdgeInsets.symmetric(
-                    //     horizontal: 10.0, vertical: 5.0),
                     child: ListTile(
                       leading: Image.network(
                         'https://s2.coinmarketcap.com/static/img/coins/64x64/${data['id']}.png',

@@ -26,17 +26,17 @@ class CryptoDetailsPage extends StatelessWidget {
             SizedBox(height: 20.0),
             Text(
               'Name: ${data['name']}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Text(
               'Symbol: ${data['symbol']}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Text(
               'Price: \$$priceString',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
                 color: Colors.green,

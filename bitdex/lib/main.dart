@@ -21,7 +21,8 @@ class BitDex extends StatelessWidget {
     var routes = {
       '/': (context) => const login(),
       '/cryptodetails': (context) => CryptoDetailsPage(
-            data: null,
+            data: ModalRoute.of(context)?.settings.arguments
+                as Map<String, dynamic>,
           ),
       '/signup': (context) => const signup(),
       '/homepage': (context) => const homepage(),

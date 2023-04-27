@@ -47,6 +47,57 @@ class _homepageState extends State<homepage> {
     });
   }
 
+  void _sortCryptoData(String option) {
+    setState(() {
+      switch (option) {
+        case 'name':
+          _filteredCryptoData.sort((a, b) => a['name'].compareTo(b['name']));
+          break;
+        case 'price':
+          _filteredCryptoData.sort((a, b) =>
+              a['quote']['USD']['price'].compareTo(b['quote']['USD']['price']));
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  void _showSortOptions() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sort Cryptocurrency'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.sort_by_alpha),
+              title: const Text('Name'),
+              onTap: () {
+                _sortCryptoData('name');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.attach_money),
+              title: const Text('Price'),
+              onTap: () {
+                _sortCryptoData('price');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.cancel),
+              title: const Text('Clear Sorting'),
+              onTap: (() {}),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +117,10 @@ class _homepageState extends State<homepage> {
               icon: _isSearching
                   ? const Icon(Icons.clear)
                   : const Icon(Icons.search),
+            ),
+            IconButton(
+              onPressed: _showSortOptions,
+              icon: const Icon(Icons.sort),
             ),
           ],
           backgroundColor: Colors.black,
@@ -158,25 +213,31 @@ class _homepageState extends State<homepage> {
                         double.parse(data['quote']['USD']['price'].toString());
                     final priceString = price.toStringAsFixed(2);
 
-                    return Card(
-                      elevation: 0.0,
-                      color: Colors.transparent,
-                      child: ListTile(
-                        leading: Image.network(
-                          'https://s2.coinmarketcap.com/static/img/coins/64x64/${data['id']}.png',
-                          height: 40.0,
-                          width: 40.0,
-                        ),
-                        title: Text(
-                          data['name'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        trailing: Text(
-                          '\$$priceString',
-                          style: const TextStyle(
-                            color: Colors.green,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/cryptodetails',
+                            arguments: data);
+                      },
+                      child: Card(
+                        elevation: 0.0,
+                        color: Colors.transparent,
+                        child: ListTile(
+                          leading: Image.network(
+                            'https://s2.coinmarketcap.com/static/img/coins/64x64/${data['id']}.png',
+                            height: 40.0,
+                            width: 40.0,
+                          ),
+                          title: Text(
+                            data['name'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          trailing: Text(
+                            '\$$priceString',
+                            style: const TextStyle(
+                              color: Colors.green,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

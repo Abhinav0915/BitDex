@@ -1,94 +1,56 @@
-import 'package:bitdex/constants/appcolors.dart';
-import 'package:bitdex/screens/homepage.dart';
-import 'package:bitdex/screens/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
-class favorite extends StatefulWidget {
-  const favorite({Key? key}) : super(key: key);
+import '../provider/fav_provider.dart';
 
-  @override
-  State<favorite> createState() => _favoriteState();
-}
-
-class _favoriteState extends State<favorite> {
-  bool _isSearching = false;
-  List _filteredCryptoData = [];
-  List _cryptoData = [];
-  final _searchController = TextEditingController();
+class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BitDex'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _isSearching = !_isSearching;
-                if (!_isSearching) {
-                  _searchController.clear();
-                  _filteredCryptoData = _cryptoData;
-                }
-              });
-            },
-            icon: _isSearching
-                ? const Icon(Icons.clear)
-                : const Icon(Icons.search),
-          ),
-        ],
-        backgroundColor: Colors.black,
-        centerTitle: true,
+        title: Text('Favorite Cryptocurrencies'),
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.black,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.white54,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const homepage()),
+      body: Consumer<Favorites>(
+        builder: (context, favorites, child) {
+          if (favorites.favorites.isEmpty) {
+            return const Center(
+              child: Text('No favorites added.'),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: favorites.favorites.length,
+              itemBuilder: (context, index) {
+                final crypto = favorites.favorites[index];
+                final price = double.parse(crypto['quote']['USD']['price'].toString());
+                final priceString = price.toStringAsFixed(2);
+
+                return ListTile(
+                  leading: Image.network(
+                    'https://s2.coinmarketcap.com/static/img/coins/64x64/${crypto['id']}.png',
+                    height: 40.0,
+                    width: 40.0,
+                  ),
+                  title: Text(
+                    crypto['name'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '\$$priceString',
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 );
               },
-            ),
-            ListTile(
-              leading: const Icon(Icons.favorite),
-              title: const Text('Favorites'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Log Out'),
-              leading: const Icon(Icons.logout),
-              onTap: () async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.clear();
-                FirebaseAuth.instance.signOut();
-                // ignore: use_build_context_synchronously
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const login()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      body: const Center(
-        child: Text('Favourite'),
+            );
+          }
+        },
       ),
     );
   }

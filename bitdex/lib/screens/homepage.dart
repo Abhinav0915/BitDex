@@ -90,7 +90,11 @@ class _homepageState extends State<homepage> {
             ListTile(
               leading: const Icon(Icons.cancel),
               title: const Text('Clear Sorting'),
-              onTap: (() {}),
+              onTap: (() {
+                //clear all sorting
+                _filteredCryptoData = List.from(_cryptoData);
+                Navigator.pop(context);
+              }),
             )
           ],
         ),
@@ -150,7 +154,7 @@ class _homepageState extends State<homepage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const favorite()),
+                    MaterialPageRoute(builder: (context) =>  FavoriteScreen()),
                   );
                 },
               ),
@@ -158,7 +162,7 @@ class _homepageState extends State<homepage> {
                 title: const Text('Log Out'),
                 leading: const Icon(Icons.logout),
                 onTap: () async {
-                  print('Log out tapped');
+                  // print('Log out tapped');
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear();
                   FirebaseAuth.instance.signOut();
@@ -206,9 +210,9 @@ class _homepageState extends State<homepage> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _filteredCryptoData.length,
+                  itemCount: _filteredCryptoData.length,//_cryptoData.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final data = _filteredCryptoData[index];
+                    final data = _filteredCryptoData[index];//_cryptoData[index];
                     final price =
                         double.parse(data['quote']['USD']['price'].toString());
                     final priceString = price.toStringAsFixed(2);

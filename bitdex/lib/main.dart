@@ -1,3 +1,4 @@
+import 'package:bitdex/provider/fav_provider.dart';
 import 'package:bitdex/screens/cryptodetails.dart';
 import 'package:bitdex/screens/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,11 +7,16 @@ import 'package:bitdex/screens/login.dart';
 import 'package:bitdex/screens/splash.dart';
 import 'package:bitdex/screens/homepage.dart';
 import '../screens/favorite.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const BitDex());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => Favorites()),
+    ], child: const BitDex()),
+  );
 }
 
 class BitDex extends StatelessWidget {
@@ -26,7 +32,7 @@ class BitDex extends StatelessWidget {
           ),
       '/signup': (context) => const signup(),
       '/homepage': (context) => const homepage(),
-      '/favorite': (context) => const favorite(),
+      '/favorite': (context) => FavoriteScreen(),
       '/splash': (context) => const splash(),
     };
     return MaterialApp(
